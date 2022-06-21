@@ -40,9 +40,9 @@ func init() {
 }
 
 // Notify sends desktop notification.
-func Notify(title, message, appIcon string) error {
+func Notify(appName, title, message, appIcon string) error {
 	if isWindows10 {
-		return toastNotify(title, message, appIcon)
+		return toastNotify(appName, title, message, appIcon)
 	}
 
 	err := baloonNotify(title, message, appIcon, false)
@@ -87,14 +87,14 @@ func baloonNotify(title, message, appIcon string, bigIcon bool) error {
 	return tray.ShowMessage(title, message, bigIcon)
 }
 
-func toastNotify(title, message, appIcon string) error {
-	notification := toastNotification(title, message, pathAbs(appIcon))
+func toastNotify(appName, title, message, appIcon string) error {
+	notification := toastNotification(appName, title, message, pathAbs(appIcon))
 	return notification.Push()
 }
 
-func toastNotification(title, message, appIcon string) toast.Notification {
+func toastNotification(appName, title, message, appIcon string) toast.Notification {
 	return toast.Notification{
-		AppID:   applicationID,
+		AppID:   appName,
 		Title:   title,
 		Message: message,
 		Icon:    appIcon,
